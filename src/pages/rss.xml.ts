@@ -5,7 +5,9 @@ import { profile } from '../lib/data';
 const esc = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c]!);
 
 export const GET: APIRoute = async ({ site }) => {
-  const base = new URL(import.meta.env.BASE_URL, site ?? 'https://example.com');
+  // BASE_URL 形如 '/' 或 '/snowline'，没有尾斜杠时 new URL 会把它当"文件"，相对链接会把最后一段吃掉
+  const raw = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+  const base = new URL(raw, site ?? 'https://example.com');
   const posts = await getPosts();
   const items = posts.map((p) => {
     const link = new URL(`posts/${p.id}/`, base).href;

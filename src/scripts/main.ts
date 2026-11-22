@@ -26,3 +26,9 @@ document.querySelector('[data-toggle-audio]')?.addEventListener('click', () => {
   toast(audioOn() ? '风声 ON' : '风声 OFF', audioOn() ? '实时合成，越快风越大' : 'MUTED');
 });
 document.querySelector('[data-toggle-menu]')?.addEventListener('click', () => { html.classList.toggle('menu-open'); emit('hover'); });
+
+// 顶栏在滚动后变实底，否则正文会从导航底下穿出来（手机端特别明显）
+const nav = document.querySelector<HTMLElement>('.nav');
+const syncNav = () => { nav?.classList.toggle('solid', window.scrollY > 24); };
+syncNav();
+window.addEventListener('scroll', syncNav, { passive: true });
