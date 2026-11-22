@@ -1,0 +1,6 @@
+---
+interface Props { value: string | number; unit?: string; label?: string }
+const { value, unit, label } = Astro.props;
+const n = Number(value);
+---
+<div class="stat"><b data-count={Number.isFinite(n) ? n : undefined}>{value}</b>{unit && <i>{unit}</i>}{label && <span>{label}</span>}</div>

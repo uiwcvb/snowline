@@ -1,0 +1,6 @@
+---
+import Flake from '../Flake.astro';
+interface Props { seed: string; caption?: string; complexity?: number }
+const { seed, caption, complexity = 3 } = Astro.props;
+---
+<figure class="crystal-fig"><Flake seed={seed} complexity={complexity} sw={1.2} />{caption && <figcaption>{caption} · SEED “{seed}”</figcaption>}</figure>

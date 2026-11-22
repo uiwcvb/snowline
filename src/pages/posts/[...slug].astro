@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render } from 'astro:content';
+import { mdxComponents } from '../../components/mdx';
+import { getPosts, u } from '../../lib/posts';
+import { fmtDate } from '../../lib/data';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({ params: { slug: post.id }, props: { post, prev: posts[i + 1], next: posts[i - 1] } }));
+}
+const { post, prev, next } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+---
+<Base title={d.title} description={d.description} seed={d.seed ?? d.title} accent={d.accent} snow={d.snow} fx={d.fx} intro={d.intro} nav="posts">
+  <div class="progress" data-progress></div>
+  <div class="page">
+    <header class="post-head box">
+      <div class="meta"><span class="accent">{d.code ?? 'LOG'}</span><span>{fmtDate(d.date)}</span>{d.tags.map((t: string) => <span>#{t}</span>)}</div>
+      <h1 data-decode>{d.title}</h1>
+      <p class="lead">{d.description}</p>
+      {d.cover && <img class="cover" src={u(d.cover)} alt="" />}
+    </header>
+    <article class="article" data-article>
+      <Content components={mdxComponents} />
+    </article>
+    <nav class="post-nav" aria-label="上一篇 / 下一篇">
+      {prev ? <a class="box thin" href={u(`/posts/${prev.id}/`)}><small>&lt; 上一座营地</small><b>{prev.data.title}</b></a> : <span />}
+      {next ? <a class="box thin next" href={u(`/posts/${next.id}/`)}><small>下一座营地 &gt;</small><b>{next.data.title}</b></a> : <span />}
+    </nav>
+  </div>
+</Base>

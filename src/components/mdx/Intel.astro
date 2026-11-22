@@ -1,0 +1,5 @@
+---
+interface Props { title?: string; code?: string }
+const { title = 'INTEL', code = '' } = Astro.props;
+---
+<section class="intel-card panel"><header><b>{title}</b><span>{code}</span></header><slot /><div class="hazard"></div></section>

@@ -1,0 +1,7 @@
+---
+interface Props { images: (string | { src: string; caption?: string })[] }
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const items = (Astro.props.images ?? []).map((i) => (typeof i === 'string' ? { src: i } : i)) as { src: string; caption?: string }[];
+const fix = (s: string) => (s.startsWith('/') ? base + s : s);
+---
+<div class="gallery">{items.map((i) => <figure><img src={fix(i.src)} alt={i.caption ?? ''} loading="lazy" />{i.caption && <figcaption>{i.caption}</figcaption>}</figure>)}</div>

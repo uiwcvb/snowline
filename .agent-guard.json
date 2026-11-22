@@ -1,0 +1,5 @@
+{
+  "说明": "dsv4.1 的提交（按作者邮箱识别）只能改 allow 里的路径；其它路径（主题、脚本、样式、契约）只有人类能改。CI 会强制检查。",
+  "agentEmails": ["dsv4.1@agent.local"],
+  "allow": ["src/content/posts/", "src/content/notes/", "src/data/profile.json", "src/data/home.json", "src/data/status.json", "public/uploads/"]
+}

@@ -1,0 +1,81 @@
+{
+  "codename": "SNOWLINE",
+  "name": "某某",
+  "role": "程序员 / 设计师",
+  "tagline": "写代码，也画界面。在雪山那边做点好看的东西。",
+  "since": "2024-01-01",
+  "oshiSince": "2019-01-01",
+  "about": [
+    "白天写代码，晚上做设计，偶尔两件事一起做。",
+    "相信好的工具应该好看，好看的东西也应该好用。",
+    "这里记录做过的项目、踩过的坑、喜欢的设计，以及一些碎碎念。"
+  ],
+  "skills": [
+    {
+      "label": "前端",
+      "value": 88
+    },
+    {
+      "label": "交互",
+      "value": 82
+    },
+    {
+      "label": "视觉",
+      "value": 76
+    },
+    {
+      "label": "后端",
+      "value": 64
+    },
+    {
+      "label": "动效",
+      "value": 91
+    },
+    {
+      "label": "写作",
+      "value": 70
+    }
+  ],
+  "route": [
+    {
+      "year": "2018",
+      "title": "初雪",
+      "text": "写下第一行代码"
+    },
+    {
+      "year": "2020",
+      "title": "结晶",
+      "text": "第一次把设计稿亲手做成产品"
+    },
+    {
+      "year": "2022",
+      "title": "风起",
+      "text": "开始做独立项目"
+    },
+    {
+      "year": "2024",
+      "title": "建站",
+      "text": "这个博客上线"
+    },
+    {
+      "year": "NEXT",
+      "title": "？",
+      "text": "下一场雪，还没落下"
+    }
+  ],
+  "email": "hello@example.com",
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/"
+    },
+    {
+      "label": "Email",
+      "href": "mailto:hello@example.com"
+    },
+    {
+      "label": "RSS",
+      "href": "/rss.xml"
+    }
+  ]
+}

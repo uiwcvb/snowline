@@ -1,0 +1,13 @@
+import Callout from './Callout.astro';
+import Intel from './Intel.astro';
+import Timeline from './Timeline.astro';
+import Step from './Step.astro';
+import Compare from './Compare.astro';
+import Gallery from './Gallery.astro';
+import Danmaku from './Danmaku.astro';
+import Stat from './Stat.astro';
+import Chart from './Chart.astro';
+import Frost from './Frost.astro';
+import Crystal from './Crystal.astro';
+import Kbd from './Kbd.astro';
+export const mdxComponents = { Callout, Intel, Timeline, Step, Compare, Gallery, Danmaku, Stat, Chart, Frost, Crystal, Kbd };

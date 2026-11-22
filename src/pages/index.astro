@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, home, status, fmtDate } from '../lib/data';
+import { getPosts, getNotes, u, wordCount } from '../lib/posts';
+import { marked } from '../lib/inline';
+
+const posts = await getPosts();
+const notes = await getNotes();
+const ch = home.chapters;
+const hide: string[] = home.hide ?? [];
+const pinned: string[] = home.pinned ?? [];
+const camps = [...posts].sort((a, b) => Number(pinned.includes(b.id) || b.data.pinned) - Number(pinned.includes(a.id) || a.data.pinned)).slice(0, 6);
+const days = (d: string) => Math.max(0, Math.floor((Date.now() - new Date(d).valueOf()) / 86400000));
+const words = posts.reduce((s, p) => s + wordCount(p.body), 0) + notes.reduce((s, n) => s + wordCount(n.body), 0);
+const route = profile.route as { year: string; title: string; text: string }[];
+
+// 一镜到底的章节：进度区间与相机路线（engine.ts 的关键帧）对齐
+const STOPS = [
+  { id: 'hero', label: '舷窗', from: -0.2, to: 0.025, fade: 0.04 },
+  { id: 'about', label: ch.about.title, from: 0.15, to: 0.22 },
+  { id: 'logs', label: ch.logs.title, from: 0.27, to: 0.42 },
+  { id: 'feed', label: ch.feed.title, from: 0.46, to: 0.53 },
+  { id: 'ridge', label: ch.ridge.title, from: 0.585, to: 0.615, fade: 0.025 },
+  { id: 'stats', label: ch.stats.title, from: 0.7, to: 0.77 },
+  { id: 'route', label: '路线', from: 0.8, to: 0.86 },
+  { id: 'summit', label: ch.summit.title, from: 0.93, to: 1.3 },
+].filter((s) => !hide.includes(s.id) && !(s.id === 'route' && hide.includes('stats')));
+const at = (s: (typeof STOPS)[number]) => Math.max(0, Math.min(1, s.id === 'summit' ? 1 : (s.from + s.to) / 2));
+const no = (id: string) => String(STOPS.findIndex((s) => s.id === id)).padStart(2, '0');
+---
+<Base mode="stage" nav="home">
+  <div class="track" data-track style="height:1100vh"></div>
+
+  <nav class="route-bar" aria-label="旅程章节">
+    <i data-marker></i>
+    {STOPS.map((s) => <button data-tick={s.id} data-p={at(s)} style={`top:${at(s) * 100}%`}><span>{s.label}</span></button>)}
+  </nav>
+
+  {STOPS.map((s) => (
+    <section class={`stop s-${s.id}`} data-stop={s.id} data-from={s.from} data-to={s.to} data-fade={s.fade ?? 0.03} aria-label={s.label}>
+      {s.id === 'hero' && (
+        <div class="inner">
+          <div class="kicker" data-decode>{home.hero.kicker}</div>
+          <h1 data-decode>{home.hero.title}</h1>
+          <div class="sub">{home.hero.subtitle}</div>
+          <div class="go"><b class="blink">▼</b> {home.hero.cta} <b class="blink">▼</b></div>
+        </div>
+      )}
+
+      {s.id === 'about' && (
+        <div class="inner">
+          <span class="ch-no">{no('about')} //</span>
+          <h2 class="ch-title" data-decode>{ch.about.title}</h2>
+          <p class="ch-line">{ch.about.line}</p>
+          <div class="grid">
+            <div class="card box hit">
+              <div class="id"><span data-decode>{profile.codename}</span><small>{profile.name} · {profile.role}</small></div>
+              <p class="accent">{profile.tagline}</p>
+              <div class="about">{profile.about.map((l: string) => <p>{l}</p>)}</div>
+            </div>
+            <div class="skills box thin">
+              {profile.skills.map((k: { label: string; value: number }) => <div class="skill"><span>{k.label}</span><span class="meter"><i style={`--v:${k.value}`}></i></span><b data-count={k.value}>{k.value}</b></div>)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {s.id === 'logs' && (
+        <div class="inner">
+          <span class="ch-no">{no('logs')} //</span>
+          <h2 class="ch-title" data-decode>{ch.logs.title}</h2>
+          <p class="ch-line">{ch.logs.line}</p>
+          <div class="camps">
+            {camps.map((p, i) => (
+              <a class={`camp hit${pinned.includes(p.id) || p.data.pinned ? ' pin' : ''}`} href={u(`/posts/${p.id}/`)}>
+                <span class="no">CAMP {String(i + 1).padStart(2, '0')}</span>
+                <span><h3>{p.data.title}</h3><p>{p.data.description}</p></span>
+                <span class="d">{p.data.code ?? ''}<br />{fmtDate(p.data.date)}</span>
+              </a>
+            ))}
+          </div>
+          <a class="more hit" href={u('/posts/')}>&gt; 全部 {posts.length} 座营地</a>
+        </div>
+      )}
+
+      {s.id === 'feed' && (
+        <div class="inner">
+          <span class="ch-no">{no('feed')} //</span>
+          <h2 class="ch-title" data-decode>{ch.feed.title}</h2>
+          <p class="ch-line">{ch.feed.line}</p>
+          <div class="grid">
+            <div class="msgs">
+              {notes.slice(0, 3).map((n) => (
+                <article class="msg">
+                  <header>{fmtDate(n.data.date)} {n.data.date.toTimeString().slice(0, 5)}{n.data.mood && <span class="mood">[{n.data.mood}]</span>}</header>
+                  <div class="body" set:html={marked(n.body ?? '')} />
+                </article>
+              ))}
+              <a class="more hit" href={u('/notes/')}>&gt; 全部电台</a>
+            </div>
+            <aside class="status box thin">
+              <div class="row"><span>正在</span><b><span class="accent blink">■</span> {status.doing}</b></div>
+              <div class="row"><span>心情</span><b>{status.mood}</b></div>
+              {status.listening && <div class="row"><span>在听</span><b>{status.listening}</b></div>}
+              {status.message && <div class="row"><span>留言</span><b>{status.message}</b></div>}
+            </aside>
+          </div>
+        </div>
+      )}
+
+      {s.id === 'ridge' && (
+        <div class="inner">
+          <span class="ch-no">{no('ridge')} //</span>
+          <h2 class="big" data-decode>{ch.ridge.title}</h2>
+          <p class="ch-line">{ch.ridge.line}</p>
+        </div>
+      )}
+
+      {s.id === 'stats' && (
+        <div class="inner">
+          <span class="ch-no">{no('stats')} //</span>
+          <h2 class="ch-title" data-decode>{ch.stats.title}</h2>
+          <p class="ch-line">{ch.stats.line}</p>
+          <div class="tele">
+            <div><b data-count={posts.length}>0</b><span>营地 · 文章</span></div>
+            <div><b data-count={notes.length}>0</b><span>电台 · 短讯</span></div>
+            <div class="acc"><b data-count={words}>0</b><span>总字数</span></div>
+            <div><b data-count={days(profile.since)}>0</b><span>出发天数</span></div>
+            {profile.oshiSince ? <div class="acc"><b data-count={days(profile.oshiSince)}>0</b><span>白狐同行天数</span></div> : <div><b data-count={profile.skills.length}>0</b><span>技能</span></div>}
+            <div><b>#<span data-r="visits">001</span></b><span>你的登机次数</span></div>
+          </div>
+        </div>
+      )}
+
+      {s.id === 'route' && (
+        <div class="inner">
+          <span class="ch-no">{no('route')} //</span>
+          <h2 class="ch-title" data-decode>路线</h2>
+          <div class="route" style={`--n:${route.length}`}>
+            {route.map((r) => <div><span class="yr">{r.year}</span><h4>{r.title}</h4><p>{r.text}</p></div>)}
+          </div>
+        </div>
+      )}
+
+      {s.id === 'summit' && (
+        <div class="inner">
+          <span class="ch-no">{no('summit')} //</span>
+          <h2 class="ch-title" data-decode>{ch.summit.title}</h2>
+          <p class="ch-line">{ch.summit.line}</p>
+          <a class="mail hit" href={`mailto:${profile.email}`}>{profile.email}</a>
+          <div class="lk">{profile.links.map((l: { label: string; href: string }) => <a class="btn ghost hit" href={l.href.startsWith('/') ? u(l.href) : l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{l.label}</a>)}</div>
+          <div class="end">© {new Date().getFullYear()} {profile.name} · 输入 konkon 看看</div>
+        </div>
+      )}
+    </section>
+  ))}
+</Base>

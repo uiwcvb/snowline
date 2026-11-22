@@ -1,0 +1,5 @@
+---
+interface Props { hint?: string; block?: boolean }
+const { hint, block = false } = Astro.props;
+---
+<span class={`frost${block ? ' block' : ''}`} data-frost-box data-nocrack data-hint={hint}><span class="frost-txt"><slot /></span><canvas aria-hidden="true"></canvas></span>

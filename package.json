@@ -1,0 +1,22 @@
+{
+  "name": "moon-blog",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "blog": "node scripts/blog.mjs",
+    "check": "node scripts/blog.mjs check",
+    "guard": "node scripts/guard.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.6",
+    "astro": "^7.4.13",
+    "gsap": "^3.15.1"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.3.2"
+  }
+}

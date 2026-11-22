@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getNotes } from '../../lib/posts';
+import { fmtDate } from '../../lib/data';
+import { marked } from '../../lib/inline';
+const notes = await getNotes();
+---
+<Base title="电台" description="路上随手发出的短讯" seed="radio-field" nav="notes" intro="调到这个频率……">
+  <div class="page">
+    <div class="list-head"><span class="kicker">RADIO</span><h1 data-decode>电台</h1></div>
+    <div class="msgs">
+      {notes.map((n) => (
+        <article class="msg">
+          <header>{fmtDate(n.data.date)} {n.data.date.toTimeString().slice(0, 5)}{n.data.mood && <span class="mood">[{n.data.mood}]</span>}{n.data.tags.map((t: string) => <span class="dim"> #{t}</span>)}</header>
+          <div class="body" set:html={marked(n.body ?? '')} />
+        </article>
+      ))}
+    </div>
+  </div>
+</Base>

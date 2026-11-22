@@ -1,0 +1,46 @@
+{
+  "accent": "blue",
+  "mountain": {
+    "seed": "snowline"
+  },
+  "hero": {
+    "kicker": "CABIN 01 // ALT 3120M",
+    "title": "越过雪山",
+    "subtitle": "一个程序员兼设计师的博客",
+    "cta": "向下滚动 · 出发"
+  },
+  "chapters": {
+    "about": {
+      "title": "乘客档案",
+      "line": "写代码，也画界面"
+    },
+    "logs": {
+      "title": "沿途营地",
+      "line": "每一篇文章，是一座扎下的营地"
+    },
+    "feed": {
+      "title": "无线电",
+      "line": "路上随手发出的短讯"
+    },
+    "ridge": {
+      "title": "越过山脊",
+      "line": "风最大的地方，视野最好"
+    },
+    "stats": {
+      "title": "航迹",
+      "line": "走过的路，留下的数"
+    },
+    "summit": {
+      "title": "登顶",
+      "line": "风雪很大，但信号是通的。来信吧。"
+    }
+  },
+  "hide": [],
+  "pinned": [],
+  "bootLines": [
+    "CABIN PRESSURE …… OK",
+    "WINDOW HEATER …… ON",
+    "ROUTE: OVER THE RIDGE",
+    "DEPARTURE READY"
+  ]
+}

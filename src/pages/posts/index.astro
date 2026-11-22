@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, u } from '../../lib/posts';
+import { fmtDate } from '../../lib/data';
+const posts = await getPosts();
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+---
+<Base title="营地" description="全部文章" seed="camps-archive" nav="posts" intro="展开地图，找到所有营地……">
+  <div class="page">
+    <div class="list-head"><span class="kicker">ALL CAMPS</span><h1 data-decode>营地</h1></div>
+    <div class="filters" data-filters>
+      <button class="on" data-tag=""><span class="chip">全部 {posts.length}</span></button>
+      {tags.map((t) => <button data-tag={t}><span class="chip">#{t}</span></button>)}
+    </div>
+    <div class="camps">
+      {posts.map((p, i) => (
+        <a class="camp" href={u(`/posts/${p.id}/`)} data-tags={p.data.tags.join('|')}>
+          <span class="no">{p.data.code ?? `CAMP ${i + 1}`}</span>
+          <span><h3>{p.data.title}</h3><p>{p.data.description}</p></span>
+          <span class="d">{fmtDate(p.data.date)}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+  <script>
+    const btns = document.querySelectorAll<HTMLButtonElement>('[data-filters] button');
+    btns.forEach((b) => b.addEventListener('click', () => {
+      btns.forEach((x) => x.classList.toggle('on', x === b));
+      const t = b.dataset.tag;
+      document.querySelectorAll<HTMLElement>('.camp').forEach((r) => { r.style.display = !t || r.dataset.tags!.split('|').includes(t) ? '' : 'none'; });
+    }));
+  </script>
+</Base>

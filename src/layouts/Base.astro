@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+import { profile, home, status } from '../lib/data';
+
+interface Props {
+  title?: string; description?: string; mode?: 'stage' | 'read';
+  seed?: string; accent?: string; snow?: number; fx?: string; intro?: string; nav?: 'home' | 'posts' | 'notes';
+}
+const p = Astro.props;
+const mode = p.mode ?? 'read';
+const title = p.title ? `${p.title} · ${profile.codename}` : `${profile.codename} · ${home.hero.title}`;
+const desc = p.description ?? profile.tagline;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="zh-CN" data-mode={mode} data-accent={p.accent ?? home.accent} data-seed={p.seed ?? home.mountain.seed}
+  data-snow={p.snow ?? 0.6} data-fx={p.fx ?? 'normal'} data-intro={p.intro} data-oshi={profile.oshiSince}
+  style={`--base:'${base}'`}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={desc} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={desc} />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  <link rel="preload" href={`${base}/fonts/pixel.woff2`} as="font" type="font/woff2" crossorigin />
+  <link rel="alternate" type="application/rss+xml" title={profile.codename} href={`${base}/rss.xml`} />
+  <style set:html={`@font-face{font-family:'Pixel';src:url('${base}/fonts/pixel.woff2') format('woff2');font-display:swap}
+    html{cursor:url('${base}/cursors/arrow.svg') 0 0,auto}
+    a,button,[data-jump],[data-tick],label{cursor:url('${base}/cursors/hand.svg') 8 0,pointer}`} />
+</head>
+<body>
+  <canvas id="world" aria-hidden="true"></canvas>
+  <div class="cover" data-cover aria-hidden="true"></div>
+
+  <div class="boot" data-boot aria-hidden="true">
+    <div class="full">
+      <div class="pct"><span data-boot-pct>000</span>%</div>
+      {home.bootLines.map((l: string) => <div data-boot-line>{l}</div>)}
+      <div class="vis" data-boot-visit></div>
+    </div>
+    <div data-boot-intro></div>
+  </div>
+
+  <header class="nav">
+    <a class="brand" href={`${base}/`} aria-label="首页">
+      <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 13l4-6 2 2 3-6 5 10z"/><path fill="var(--accent)" d="M0 13h16v2H0z"/></svg>
+      <span>{profile.codename}</span>
+    </a>
+    <nav class="links" aria-label="主导航">
+      <a href={`${base}/`} aria-current={p.nav === 'home' ? 'page' : undefined}>旅程</a>
+      <a href={`${base}/posts/`} aria-current={p.nav === 'posts' ? 'page' : undefined}>营地</a>
+      <a href={`${base}/notes/`} aria-current={p.nav === 'notes' ? 'page' : undefined}>电台</a>
+      <a href={`${base}/rss.xml`}>RSS</a>
+    </nav>
+    <button class="tog" data-toggle-audio aria-label="风声开关">风声</button>
+    <button class="tog burger" data-toggle-menu aria-label="菜单">≡</button>
+  </header>
+
+  <div class="hud" aria-hidden="true">
+    <div class="read">
+      <div>ALT <b data-r="alt">0000</b>M</div>
+      <div>DIST <b data-r="dist">0.00</b>KM</div>
+      <div>TEMP <b data-r="temp">-0.0</b>°C</div>
+      <div>WIND <b data-r="wind">0.0</b>M/S</div>
+    </div>
+    <div class="bar">
+      <span>■ <span data-r="clock">00:00:00</span></span>
+      <span>STAY <span data-r="stay">00:00</span></span>
+      <span class="hide-m">BOARDING #<span data-r="visits">001</span></span>
+      <span class="hide-m">SNOW <span data-r="snow">0.0</span>CM</span>
+      <span class="sp"></span>
+      <span class="st hide-m">[{status.mood}] {status.doing}</span>
+      <span class="hide-m">FPS <span data-r="fps">60</span></span>
+    </div>
+  </div>
+  <div class="toast" data-toast role="status" aria-live="polite"><b></b><span></span></div>
+
+  <main><slot /></main>
+  <script>import '../scripts/main';</script>
+</body>
+</html>

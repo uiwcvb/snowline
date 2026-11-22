@@ -1,0 +1,5 @@
+---
+interface Props { time?: string; title?: string }
+const { time, title } = Astro.props;
+---
+<div class="step">{time && <div class="tm">{time}</div>}{title && <b>{title}</b>}<div><slot /></div></div>

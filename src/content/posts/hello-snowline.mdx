@@ -1,0 +1,51 @@
+---
+title: 你好，越过雪山
+date: 2026-11-22
+description: 博客上线第一篇，顺便把这里能用的所有组件都演示一遍。
+tags: [建站, 设计]
+code: LOG-001
+accent: ice
+snow: 0.7
+fx: max
+pinned: true
+intro: 信号接入中——欢迎来到风雪里。
+---
+
+这是博客的第一篇。整站是一趟一镜到底的旅程：从舷窗里出发，飞过峡谷，越过山脊，落在云海之上。你滚动、点击、打字，山和雪都会回应你。
+
+<Callout type="info" title="小提示">试试在页面上随便打几个字。</Callout>
+
+## 正文组件一览
+
+<Intel title="笔记卡" code="NOTE-01">
+用来放一段需要被强调的信息，比如项目背景、结论、注意事项。
+</Intel>
+
+<Stat value="128" unit="小时" label="这个博客花掉的时间" />
+
+<Chart title="每月写作字数" data={[["8月", 3200], ["9月", 5400], ["10月", 2100], ["11月", 8800]]} />
+
+<Timeline>
+  <Step time="Day 1">定风格：像素 + 黑白蓝雪山</Step>
+  <Step time="Day 2">写像素引擎：山脊、云海、舷窗</Step>
+  <Step time="Day 3">给助理 agent 写接口文档</Step>
+</Timeline>
+
+<Compare before="改之前" after="改之后">
+```js
+el.style.left = x + 'px';
+```
+```js
+el.style.transform = `translate3d(${x}px,0,0)`;
+```
+</Compare>
+
+这里有一段被冻住的文字：<Frost>擦开霜才能看到的剧透内容 ❄</Frost>。用鼠标或手指在上面擦一擦。
+
+<Danmaku comment="这句是弹幕批注">有些话想在旁边小声补充，</Danmaku>就用弹幕批注。
+
+按 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制代码。
+
+<Crystal seed="hello" caption="每个种子都会长出不一样的雪花" />
+
+<Callout type="warn" title="注意">滚得太快的时候，画面会被风撕裂。</Callout>

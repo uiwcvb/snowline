@@ -1,0 +1,8 @@
+---
+interface Props { title?: string; data: [string, number][]; unit?: string }
+const { title, data = [], unit = '' } = Astro.props;
+const max = Math.max(1, ...data.map((d) => d[1]));
+---
+<figure class="chart panel">{title && <div class="t">{title}</div>}<div class="bars">{data.map(([k, v], i) => (
+  <div class="bar"><span>{k}</span><div class="f" style={`--w:${(v / max).toFixed(4)};animation-delay:${i * 0.08}s`}></div><span class="v">{v.toLocaleString('en-US')}{unit}</span></div>
+))}</div></figure>

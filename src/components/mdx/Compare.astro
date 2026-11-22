@@ -1,0 +1,5 @@
+---
+interface Props { before?: string; after?: string }
+const { before = 'BEFORE', after = 'AFTER' } = Astro.props;
+---
+<div class="compare"><div class="h">{before}</div><div class="h a">{after}</div><slot /></div>

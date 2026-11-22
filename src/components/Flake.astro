@@ -1,0 +1,6 @@
+---
+import { crystalPath } from '../lib/crystal';
+interface Props { seed: string; complexity?: number; class?: string; sw?: number }
+const { seed, complexity = 2, class: cls, sw = 1.5 } = Astro.props;
+---
+<svg class={cls} viewBox="-50 -50 100 100" aria-hidden="true"><path d={crystalPath(seed, complexity, 46)} fill="none" stroke="currentColor" stroke-width={sw} stroke-linecap="square" vector-effect="non-scaling-stroke" /></svg>
